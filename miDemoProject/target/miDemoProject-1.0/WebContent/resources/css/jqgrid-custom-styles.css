@@ -1,0 +1,38 @@
+/*.ui-jqgrid .ui-jqgrid-btable{table-layout: auto;}*/
+.ui-jqgrid .ui-pg-selbox {font-size:.8em;line-height:18px; display:block;height:18px; margin: 0em;}
+.ui-jqgrid .ui-jqgrid-titlebar {background-color: #f6f6f6;}
+.ui-jqgrid .ui-jqgrid-htable .ui-th-div {height: 17px; margin-top: 5px;	display: inline;}
+
+/*Para que se centren los checkbox del grid-->*/
+.table>tbody>tr>td {vertical-align: middle;}
+
+div.ui-jqgrid-view table.ui-jqgrid-btable
+{
+    border-style:none;
+    border-top-style:none;
+    border-collapse:separate;
+}
+div.ui-jqgrid-view table.ui-jqgrid-btable td
+{
+    border-left-style:none
+}
+div.ui-jqgrid-view table.ui-jqgrid-htable
+{
+    border-style:none;
+    border-top-style:none;
+    border-collapse:separate;
+}
+div.ui-jqgrid-view table.ui-jqgrid-btable th
+{
+    border-left-style:none
+}
+	
+/*cambio el orden de colores pares por impares para que empiece en fila con fondo transparente */
+.table-striped.ui-jqgrid-btable>tbody>tr:nth-of-type(odd), .table>thead {
+ 	 background-color: #f5f5f5;
+}
+.table-striped.ui-jqgrid-btable>tbody>tr:nth-of-type(even) {
+  	background-color: transparent;
+}
+/*Correccion del scroll horizontal extra que sale al redimiensionar la pantalla con la propiedad resposive= true de la tabla*/
+.ui-jqgrid .ui-jqgrid-bdiv{overflow: hidden}

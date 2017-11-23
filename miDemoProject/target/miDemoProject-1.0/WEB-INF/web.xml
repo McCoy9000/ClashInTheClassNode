@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="miDemoProject_ID" version="2.5">	
+	<!-- Handles all requests into the application -->
+	<display-name>Spring MVC Dispatcher Servlet</display-name>
+	<servlet>
+		<servlet-name>miDemoProject 1.0</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>
+				/WEB-INF/config/app-config.xml
+			</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+				WEB-INF/config/app-config.xml,
+				WEB-INF/config/security-config.xml
+		</param-value>
+	</context-param>
+	
+	<servlet-mapping>
+		<servlet-name>miDemoProject 1.0</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+
+	<!-- Core Spring Listener -->	
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!--  Marcado de sesiones out -->
+	<listener>
+	    <listener-class>es.eroski.miDemoProject.listeners.CustomSessionListener</listener-class>
+	</listener>
+
+	<!-- Spring Security -->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+  	
+  	<filter> 
+	    <filter-name>encodingFilter</filter-name> 
+	    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class> 
+	    <init-param> 
+	        <param-name>encoding</param-name> 
+	    	<param-value>UTF-8</param-value> 
+	    </init-param> 
+		<init-param> 
+			<param-name>forceEncoding</param-name> 
+	    	<param-value>true</param-value> 
+		</init-param> 
+	</filter> 
+	<filter-mapping> 
+	    <filter-name>encodingFilter</filter-name> 
+		<url-pattern>/*</url-pattern> 
+	</filter-mapping>
+
+	<!-- Filtro log4j.MDC -->	
+	 <filter>
+        <filter-name>UserLogMdcFilter</filter-name>
+        <filter-class>es.eroski.miDemoProject.filters.log4j.mdc.UserLogMdcFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>UserLogMdcFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+<!--     <resource-ref> -->
+<!-- 	    <description>Pool conexiones Oracle</description> -->
+<!-- 	    <res-ref-name>jdbc/denodoCache</res-ref-name> -->
+<!-- 	    <res-type>javax.sql.DataSource</res-type> -->
+<!-- 	    <res-auth>Container</res-auth> -->
+<!-- 	</resource-ref> -->
+</web-app>

@@ -1,0 +1,147 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+          http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+ 	
+	<!-- pre-post-annotations habilita las anotaciones @PreAuthorize and @PostAuthorize
+	secured-annotations="enabled" habilita la anotacion @Security para el codigo Java --> 
+	<!-- <global-method-security pre-post-annotations="enabled"/> -->
+
+	<!-- Ignora la seguridad para ese patron-->
+	<http pattern="/WebContent/**" security="none" />
+  	
+  	<http auto-config="true"  use-expressions="true">
+		
+		
+<!-- 		The mapping matches URLs using the following rules: -->
+
+<!-- 		? matches one character -->
+<!-- 		* matches zero or more characters -->
+<!-- 		** matches zero or more directories in a path -->
+
+<!-- 		Some examples: -->
+<!-- 		com/t?st.jsp - matches com/test.jsp but also com/tast.jsp or com/txst.jsp -->
+<!-- 		com/*.jsp - matches all .jsp files in the com directory -->
+<!-- 		com/**/test.jsp - matches all test.jsp files underneath the com path -->
+<!-- 		org/springframework/**/*.jsp - matches all .jsp files underneath the org/springframework path -->
+<!-- 		org/**/servlet/bla.jsp - matches org/springframework/servlet/bla.jsp but also org/springframework/testing/servlet/bla.jsp and org/servlet/bla.jsp -->
+				
+				
+		<!-- <intercept-url pattern="/**" access="permitAll"/> -->
+		<access-denied-handler error-page="/denied"/> 
+		<intercept-url pattern="/login" access="permitAll"/>
+		<intercept-url pattern="/login/failure" access="permitAll"/>
+		<intercept-url pattern="/logout" access="permitAll"/>
+		<intercept-url pattern="/logout/success" access="permitAll"/>
+		<intercept-url pattern="/expiredSession" access="permitAll"/>
+		<intercept-url pattern="/denied" access="isAuthenticated()"/>
+		<intercept-url pattern="/login/success" access="hasAnyRole('APPLOGIN')"/>
+		
+		<intercept-url pattern="/home" access="hasAnyRole('HOMEACCESS')"/>
+		
+		<!-- INICIO MODULO PERMISOS -->
+		<intercept-url pattern="/permisos" access="hasRole('PERMISOSACCESS')"/>
+		<!-- PESTANA USUARIOS -->
+		<intercept-url pattern="/usuarios/" access="hasRole('USERSSEARCH')"/>
+		<intercept-url pattern="/usuarios/{*}" access="hasRole('USERSUPDATE')" method="PUT"/>
+		<intercept-url pattern="/usuarios/{*}" access="hasRole('USERSADD')" method="POST"/>
+		<intercept-url pattern="/usuarios/{*}" access="hasRole('USERSDELETE')" method="DELETE"/>
+		<intercept-url pattern="/usuarios/{*}" access="hasRole('USERSEDIT')" method="GET"/>
+		<!-- 
+		<intercept-url pattern="/usuarios/exportar" access="hasRole('USERSEXPORT')"/>
+		-->
+		<intercept-url pattern="/usuarios/rolesUsuario/{*}" access="hasRole('USERSROLESVIEW')" method="GET"/>
+		<intercept-url pattern="/usuarios/rolesUsuarioDispon/{*}" access="hasRole('USERSROLESVIEW')" method="GET"/>
+		<intercept-url pattern="/usuarios/rolesUsuarioUpdate/{*}/{*}" access="hasRole('USERSROLESEDIT')" method="PUT"/>
+		<!-- PESTANA ROLES -->
+		<intercept-url pattern="/roles/" access="hasRole('ROLESSEARCH')"/>
+		<intercept-url pattern="/roles/{*}" access="hasRole('ROLESUPDATE')" method="PUT"/>
+		<intercept-url pattern="/roles/{*}" access="hasRole('ROLESADD')" method="POST"/>
+		<intercept-url pattern="/roles/{*}" access="hasRole('ROLESDELETE')" method="DELETE"/>
+		<intercept-url pattern="/roles/{*}" access="hasRole('ROLESEDIT')" method="GET"/>
+		<!-- 
+		<intercept-url pattern="/roles/exportar" access="hasRole('ROLESEXPORT')"/>
+		-->
+		<intercept-url pattern="/roles/permisosRol/{*}" access="hasRole('ROLESPERMISOSVIEW')" method="GET"/>
+		<intercept-url pattern="/roles/permisosRolDispon/{*}" access="hasRole('ROLESPERMISOSVIEW')" method="GET"/>
+		<intercept-url pattern="/roles/permisosRolUpdate/{*}/{*}" access="hasRole('ROLESPERMISOSEDIT')" method="PUT"/>
+		<!-- PESTANA PERSMISOS  -->
+		<intercept-url pattern="/permisos/" access="hasRole('PERMISOSSEARCH')"/>
+		<intercept-url pattern="/permisos/{*}" access="hasRole('PERMISOSEDIT')" method="GET"/>
+		<!-- FIN MODULO PERMISOS -->
+		
+		<!-- INICIO MODULO SESIONES -->
+		<intercept-url pattern="/sesiones" access="hasRole('SESSIONSACCESS')"/>
+		<intercept-url pattern="/sesiones/" access="hasRole('SESSIONSSEARCH')"/>
+		<intercept-url pattern="/sesiones/expirar/{*}" access="hasRole('SESSIONSEXPIRE')" method="PUT"/>
+		<!-- FIN MODULO SESIONES -->
+		
+		<!-- DEMOS -->
+		<intercept-url pattern="/demos/area/{*}/responsables" access="hasAnyRole('ROLE_ROOT, ROLE_ADMIN, ROLE_USER')"/>
+		<intercept-url pattern="/demos/*" access="hasAnyRole('ROLE_ROOT, ROLE_ADMIN, ROLE_USER')"/>
+		
+		<!-- CRUD USUARIOS jqGrid JS-->
+		<intercept-url pattern="/jqGridCrud" access="hasAnyRole('ROLE_ROOT, ROLE_ADMIN, ROLE_USER')"/>
+		<intercept-url pattern="/jqGridCrud/" access="hasAnyRole('ROLE_ROOT, ROLE_ADMIN, ROLE_USER')"/>
+		<intercept-url pattern="/jqGridCrud/{*}" access="hasAnyRole('ROLE_ROOT, ROLE_ADMIN, ROLE_USER')"/>
+		<intercept-url pattern="/jqGridCrud/exportar" access="hasAnyRole('ROLE_ROOT, ROLE_ADMIN, ROLE_USER')"/>
+		
+		<!-- CRUD USUARIOS Datetable -->
+		<intercept-url pattern="/datatableCrud" access="hasAnyRole('ROLE_ROOT, ROLE_ADMIN, ROLE_USER')"/>
+		<intercept-url pattern="/datatableCrud/" access="hasAnyRole('ROLE_ROOT, ROLE_ADMIN, ROLE_USER')"/>
+		<intercept-url pattern="/datatableCrud/{*}" access="hasAnyRole('ROLE_ROOT, ROLE_ADMIN, ROLE_USER')"/>
+		<intercept-url pattern="/datatableCrud/exportar" access="hasAnyRole('ROLE_ROOT, ROLE_ADMIN, ROLE_USER')"/>
+		
+		
+		<!-- Deniega cualquier acceso que no este explicitamente interceptado -->
+		<intercept-url pattern="/**" access="denyAll"/> 
+
+ 	<!-- Cualquier ruta a la aplicacion necesita permiso como minimo de usuario a excepcion de las expecificadas arriba.
+ 		 	Despues, en cada metodo o controller podremos restingir el acceso mas si es necesario
+ 		 	por medio de anotaciones @PreAuthorize and @PostAuthorize -->
+	<!-- <intercept-url pattern="/**" access="hasRole('ROLE_USER')"/> -->
+
+		
+		<!-- Configuracion para el formulario de login -->
+		<form-login login-page="/login" login-processing-url="/j_spring_security_check"
+			authentication-success-handler-ref="customAuthenticationSuccessHandler"
+			always-use-default-target="true"
+			authentication-failure-url="/login/failure"			
+			username-parameter="userCode" password-parameter="password"/>
+		
+		<!-- Cerrar aplicacion -->
+		<logout logout-url="/logout" 
+		  success-handler-ref="customSuccessLogoutHandler" 
+          delete-cookies="JSESSIONID" 
+          invalidate-session="false" />
+          
+        <session-management invalid-session-url="/expiredSession">
+			<!-- 
+			<concurrency-control session-registry-alias="sessionRegistry" expired-url="/expiredSession" />
+			-->
+			<concurrency-control session-registry-alias="sessionRegistry" />
+			
+		</session-management>
+		
+		<!-- 
+ 		<session-management  invalid-session-url="/expiredSession"/>
+		-->		
+	</http>
+    
+	<!-- Gestión de usuarios mediante base de datos -->
+    <authentication-manager alias="autenticationManagerUserService">
+	    <authentication-provider ref="autenticacionBS"/>
+  	</authentication-manager>
+  	
+  	<beans:bean id="autenticacionBS" class="es.eroski.miDemoProject.autenticacion.service.impl.AutenticacionBS ">
+  		<beans:property name="passwordEncoder" ref="encoder" />
+	</beans:bean>
+  	
+  	<beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+  	<beans:bean id="customAuthenticationSuccessHandler" class="es.eroski.miDemoProject.autenticacion.handlers.CustomAuthenticationSuccessHandler" />
+	<beans:bean id="customSuccessLogoutHandler" class="es.eroski.miDemoProject.autenticacion.handlers.CustomSuccessLogoutHandler"/>
+	
+</beans:beans>
